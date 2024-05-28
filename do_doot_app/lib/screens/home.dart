@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
   // Functions
   void _addTask(String taskToAdd) {
     setState(() {
-      taskList.add(TaskModel(id: DateTime.now().millisecondsSinceEpoch.toString(), category: 'Test', task: taskToAdd));
+      taskList.add(TaskModel(id: DateTime.now().millisecondsSinceEpoch.toString(), categoryId: 1, task: taskToAdd));
       _runFilter('');
     });
     _taskController.clear();

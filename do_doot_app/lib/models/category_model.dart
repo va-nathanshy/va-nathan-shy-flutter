@@ -7,6 +7,15 @@ class CategoryModel {
     required this.categoryName,
   });
 
+  CategoryModel.fromMap(Map<String, dynamic> data)
+      : id = data['id'] ?? 0,
+        categoryName = data['categoryName'] ?? '';
+
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'categoryName': categoryName,
+      };
+
   static List<CategoryModel> setCategories() {
     List<CategoryModel> categoryList = [];
 

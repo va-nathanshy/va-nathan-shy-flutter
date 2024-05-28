@@ -1,17 +1,30 @@
 //import 'package:flutter/material.dart';
 
 class TaskModel {
-  String id;
-  String task;
-  String category;
-  bool isActive;
+  final String id;
+  final String task;
+  final int categoryId;
+  final bool isActive;
 
   TaskModel({
     required this.id,
     required this.task,
-    required this.category,
+    required this.categoryId,
     this.isActive = true,
   });
+
+  TaskModel.fromMap(Map<String, dynamic> data)
+      : id = data['id'] ?? '',
+        task = data['task'] ?? '',
+        categoryId = data['categoryId'] ?? 0,
+        isActive = data['isActive'] ?? true;
+
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'task': task,
+        'categoryId': categoryId,
+        'isActive': isActive
+      };
 
   static List<TaskModel> setTasks() {
     List<TaskModel> taskList = [];
@@ -19,7 +32,7 @@ class TaskModel {
     taskList.add(
       TaskModel(
         id: '01',
-        category: '01',
+        categoryId: 1,
         task: 'Complete wretched Homework',
       ),
     );
@@ -27,7 +40,7 @@ class TaskModel {
     taskList.add(
       TaskModel(
         id: '02',
-        category: '02',
+        categoryId: 2,
         task: 'Review that damn rat',
       ),
     );
@@ -35,7 +48,7 @@ class TaskModel {
     taskList.add(
       TaskModel(
         id: '02',
-        category: '02',
+        categoryId: 2,
         task: 'Solve that pesky ticket',
       ),
     );
@@ -43,15 +56,7 @@ class TaskModel {
     taskList.add(
       TaskModel(
         id: '03',
-        category: '03',
-        task: 'Clean out that putrid litterbox',
-      ),
-    );
-
-    taskList.add(
-      TaskModel(
-        id: '04',
-        category: '03',
+        categoryId: 3,
         task: 'Rethink my life decisions',
       ),
     );
@@ -59,18 +64,11 @@ class TaskModel {
     taskList.add(
       TaskModel(
         id: '05',
-        category: '02',
+        categoryId: 2,
         task: 'Wallow in self pity ;(',
       ),
     );
 
     return taskList;
   }
-
-  factory TaskModel.fromSqfliteDatabase(Map<String, dynamic> map) => TaskModel(
-        id: map['id']?.toInt() ?? 0,
-        task: map['task'] ?? '',
-        category: map['category'] ?? '',
-        isActive: map['isActive'] ?? true,
-      );
 }
