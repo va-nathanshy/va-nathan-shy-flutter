@@ -1,5 +1,5 @@
 class CategoryModel {
-  String id;
+  int id;
   String categoryName;
 
   CategoryModel({
@@ -20,17 +20,17 @@ class CategoryModel {
     List<CategoryModel> categoryList = [];
 
     categoryList.add(CategoryModel(
-      id: '01',
+      id: 1,
       categoryName: 'Category 01',
     ));
 
     categoryList.add(CategoryModel(
-      id: '02',
+      id: 2,
       categoryName: 'Category 02',
     ));
 
     categoryList.add(CategoryModel(
-      id: '03',
+      id: 3,
       categoryName: 'Category 03',
     ));
 

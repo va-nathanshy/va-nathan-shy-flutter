@@ -9,14 +9,10 @@ import 'package:do_doot_app/models/task_model.dart';
 // has to be stateful
 class TaskItem extends StatefulWidget {
   final TaskModel task;
-  final Function onTaskUpdated;
-  final Function onTaskDeleted;
 
   const TaskItem({
     super.key,
     required this.task,
-    required this.onTaskUpdated,
-    required this.onTaskDeleted,
   });
 
   @override
@@ -48,24 +44,29 @@ class _TaskItemState extends State<TaskItem> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        tileColor: Colors.blue,
+        tileColor: Colors.orange,
         leading: IconButton(
-          icon: Icon(widget.task.isActive ? Icons.circle_outlined : Icons.check_circle),
+          icon: Icon(widget.task.isActive
+              ? Icons.circle_outlined
+              : Icons.check_circle),
           onPressed: () {
-            widget.onTaskUpdated(widget.task, !widget.task.isActive, null);
+            //widget.onTaskUpdated(widget.task, !widget.task.isActive, null);
+            print('task updated');
           },
         ),
         title: Text(
           widget.task.task,
           style: TextStyle(
             fontSize: 16,
-            decoration: widget.task.isActive ? TextDecoration.none : TextDecoration.lineThrough,
+            decoration: widget.task.isActive
+                ? TextDecoration.none
+                : TextDecoration.lineThrough,
           ),
         ),
         trailing: IconButton(
           onPressed: () {
-            print('Pressed delete button');
-            widget.onTaskDeleted(widget.task.id);
+            print('Task Deleted');
+            //widget.onTaskDeleted(widget.task.id);
           },
           icon: Icon(Icons.delete),
           iconSize: 18,
@@ -95,7 +96,9 @@ class _TaskItemState extends State<TaskItem> {
                     const Text('Save'),
                     ElevatedButton(
                       onPressed: () {
-                        widget.onTaskUpdated(widget.task, widget.task.isActive, _taskUpdateController.text);
+                        print("task updated");
+                        //widget.onTaskUpdated(widget.task, widget.task.isActive,
+                            //_taskUpdateController.text);
                         _taskUpdateController.clear();
                         Navigator.pop(context);
                       },

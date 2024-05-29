@@ -1,3 +1,4 @@
+import 'package:do_doot_app/database/task_db.dart';
 import 'package:flutter/material.dart';
 // Models
 import 'package:do_doot_app/models/task_model.dart';
@@ -6,7 +7,7 @@ import 'package:do_doot_app/models/category_model.dart';
 import 'package:do_doot_app/widgets/task_item.dart';
 
 //DB
-//import 'package:do_doot_app/database/do_doot_db.dart';
+import 'package:do_doot_app/repositories/task_repository_local.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,25 +17,35 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<TaskModel> taskList = [];
+  // Updated DB
+  final TaskRepository _taskRepository = TaskRepository(TaskDb());
+
+  // Lists
+  List<TaskModel> _taskList = [];
   List<TaskModel> searchTaskList = [];
   List<CategoryModel> categoryList = [];
 
-  // Future<List<TaskModel>>? futureTasks;
-  // final taskDB = DoDootDB();
-
   final _taskController = TextEditingController();
-
-  void _getInitialInfo() {
-    taskList = TaskModel.setTasks(); // turn this into a getApi function thing
-    searchTaskList = TaskModel.setTasks();
-    categoryList = CategoryModel.setCategories();
-  }
 
   @override
   void initState() {
     super.initState();
     _getInitialInfo();
+  }
+
+  void _getInitialInfo() {
+    //taskList = TaskModel.setTasks(); // turn this into a getApi function thing
+    _loadTasks();
+    searchTaskList = TaskModel.setTasks();
+    categoryList = CategoryModel.setCategories();
+  }
+
+  void _loadTasks() async {
+    List<TaskModel> taskList = await _taskRepository.getAllTasks();
+
+    setState(() {
+      _taskList = taskList;
+    });
   }
 
   @override
@@ -65,7 +76,7 @@ class _HomePageState extends State<HomePage> {
 
   AppBar appBar() {
     return AppBar(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.orange,
       title: TextField(
         onChanged: (value) => _runFilter(value),
         decoration: InputDecoration(
@@ -129,7 +140,7 @@ class _HomePageState extends State<HomePage> {
         ),
         Row(
           children: [
-            Text('${taskList.length} tasks'),
+            Text('${_taskList.length} tasks'),
           ],
         ),
       ],
@@ -139,11 +150,9 @@ class _HomePageState extends State<HomePage> {
   Column _tasks() {
     return Column(
       children: [
-        for (TaskModel task in searchTaskList.reversed)
+        for (TaskModel task in _taskList)
           TaskItem(
             task: task,
-            onTaskUpdated: _updateTask,
-            onTaskDeleted: _deleteTask,
           ),
       ],
     );
@@ -201,38 +210,45 @@ class _HomePageState extends State<HomePage> {
   // Functions
   void _addTask(String taskToAdd) {
     setState(() {
-      taskList.add(TaskModel(id: DateTime.now().millisecondsSinceEpoch.toString(), categoryId: 1, task: taskToAdd));
-      _runFilter('');
+      // taskList.add(TaskModel(
+      //     id: DateTime.now().millisecondsSinceEpoch.toString(),
+      //     categoryId: 1,
+      //     task: taskToAdd));
+      // _runFilter('');
     });
     _taskController.clear();
   }
 
-  void _updateTask(TaskModel taskToUpdate, bool updatedStatus, String? updatedTask) {
+  void _updateTask(
+      TaskModel taskToUpdate, bool updatedStatus, String? updatedTask) {
     setState(() {
-      taskToUpdate.task = updatedTask ?? taskToUpdate.task;
-      //taskToUpdate.category
-      taskToUpdate.isActive = updatedStatus;
+      // taskToUpdate.task = updatedTask ?? taskToUpdate.task;
+      // //taskToUpdate.category
+      // taskToUpdate.isActive = updatedStatus;
       _runFilter('');
     });
   }
 
   void _deleteTask(String id) {
     setState(() {
-      taskList.removeWhere((element) => element.id == id);
+      // taskList.removeWhere((element) => element.id == id);
       _runFilter('');
     });
   }
 
   void _runFilter(String searchKeyword) {
-    List<TaskModel> searchResults = [];
+    // List<TaskModel> searchResults = [];
 
-    if (searchKeyword.isEmpty) {
-      searchResults = taskList;
-    } else {
-      searchResults = taskList.where((element) => element.task.toLowerCase().contains(searchKeyword.toLowerCase())).toList();
-    }
-    setState(() {
-      searchTaskList = searchResults;
-    });
+    // if (searchKeyword.isEmpty) {
+    //   searchResults = taskList;
+    // } else {
+    //   searchResults = taskList
+    //       .where((element) =>
+    //           element.task.toLowerCase().contains(searchKeyword.toLowerCase()))
+    //       .toList();
+    // }
+    // setState(() {
+    //   searchTaskList = searchResults;
+    // });
   }
 }

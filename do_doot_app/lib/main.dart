@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:do_doot_app/theme/theme.dart';
 //pages
 import 'package:do_doot_app/screens/home.dart';
+//data
+import 'package:do_doot_app/database/task_db.dart';
+import 'package:do_doot_app/database/category_db.dart';
 
 void main() {
   runApp(const MyApp());
+  TaskDb().generateSampleData();
+  CategoryDb().generateSampleData();
 }
 
 class MyApp extends StatelessWidget {

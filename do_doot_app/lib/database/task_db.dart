@@ -13,7 +13,7 @@ class TaskDb {
     return _db;
   }
 
-  Future<List<Map<String, dynamic>>> getAll() async {
+  Future<List<Map<String, dynamic>>> getAllTasks() async {
     return _tasks;
   }
 
@@ -28,9 +28,10 @@ class TaskDb {
     return task['id'];
   }
 
-  Future<void> updateTask(Map<String, dynamic> updatedTask) async {
+  Future<String> updateTask(Map<String, dynamic> updatedTask) async {
     int i = _tasks.indexWhere((task) => task['id'] == updatedTask['id']);
     _tasks[i] = updatedTask;
+    return updatedTask['id'];
   }
 
   Future<void> removeTask(String id) async {
@@ -73,9 +74,6 @@ class TaskDb {
       ).toMap(),
     ];
 
-    _tasks = [
-      ..._tasks,
-      ...sampleData
-    ];
+    _tasks = [..._tasks, ...sampleData];
   }
 }
