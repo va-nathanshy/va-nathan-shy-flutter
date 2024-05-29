@@ -1,12 +1,12 @@
 import 'package:do_doot_app/database/category_db.dart';
 import 'package:do_doot_app/database/task_db.dart';
+import 'package:do_doot_app/widgets/add_task_floating_action_button.dart';
 import 'package:flutter/material.dart';
 // Models
 import 'package:do_doot_app/models/task_model.dart';
 import 'package:do_doot_app/models/category_model.dart';
 // Widgets
 import 'package:do_doot_app/widgets/task_item.dart';
-
 //DB
 import 'package:do_doot_app/repositories/task_repository_local.dart';
 import 'package:do_doot_app/repositories/category_repository_local.dart';
@@ -40,7 +40,6 @@ class _HomePageState extends State<HomePage> {
   void _getInitialInfo() {
     _loadTasks();
     _loadCategories();
-    searchTaskList = TaskModel.setTasks();
   }
 
   void _loadTasks() async {
@@ -54,6 +53,9 @@ class _HomePageState extends State<HomePage> {
   void _loadCategories() async {
     List<CategoryModel> categoryList =
         await _categoryRepository.getAllCategories();
+    setState(() {
+      _categoryList = categoryList;
+    });
   }
 
   @override
@@ -61,14 +63,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: appBar(),
       body: Container(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 15,
         ),
         child: ListView(
           children: [
             Container(
-              margin: EdgeInsets.only(
+              margin: const EdgeInsets.only(
                 bottom: 20,
               ),
               child: _title(),
@@ -78,18 +80,21 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      floatingActionButton: _floatingActionButton(context),
+      floatingActionButton: AddTaskFloatingActionButton(),
     );
   }
 
   AppBar appBar() {
     return AppBar(
       backgroundColor: Colors.orange,
-      title: TextField(
-        onChanged: (value) => _runFilter(value),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: 'Search',
+      title: Visibility(
+        visible: true, 
+        child: TextField(
+          onChanged: (value) => _runFilter(value),
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Search',
+          ),
         ),
       ),
       actions: [
@@ -124,16 +129,13 @@ class _HomePageState extends State<HomePage> {
     return PopupMenuButton(
       icon: Icon(Icons.filter_alt),
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-        // const PopupMenuItem(
-        //   child: Text('Item1'),
-        // ),
-        // const PopupMenuItem(
-        //   child: Text('Item2'),
-        // ),
-        // const PopupMenuItem(
-        //   child: Text('Item3'),
-        // ),
-        //for (CategoryModel in _)
+        for (CategoryModel category in _categoryList)
+          PopupMenuItem(
+              onTap: () {
+                // call filter thing here
+                print('Tapped ${category.id}');
+              },
+              child: Text(category.categoryName))
       ],
     );
   }
@@ -171,54 +173,59 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  FloatingActionButton _floatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (BuildContext context) {
-            return SizedBox(
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Close'),
-                        ),
-                        const Text('New Task'),
-                        ElevatedButton(
-                          onPressed: () {
-                            _addTask(_taskController.text);
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Save'),
-                        ),
-                      ],
-                    ),
-                    TextField(
-                      controller: _taskController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter New Task',
-                      ),
-                    ),
-                    //DROPDOWN MENU GOES HERE
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-      tooltip: 'Add Task',
-      child: const Icon(Icons.add),
-    );
-  }
+  // FloatingActionButton _floatingActionButton(BuildContext context) {
+  //   return FloatingActionButton(
+  //     onPressed: () {
+  //       showModalBottomSheet(
+  //         context: context,
+  //         builder: (BuildContext context) {
+  //           return SizedBox(
+  //             child: Center(
+  //               child: Column(
+  //                 children: <Widget>[
+  //                   Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                     children: [
+  //                       ElevatedButton(
+  //                         onPressed: () {
+  //                           Navigator.pop(context);
+  //                         },
+  //                         child: const Text('Close'),
+  //                       ),
+  //                       const Text('New Task'),
+  //                       ElevatedButton(
+  //                         onPressed: () {
+  //                           _addTask(_taskController.text);
+  //                           Navigator.pop(context);
+  //                         },
+  //                         child: const Text('Save'),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   Row(
+  //                     children: [
+  //                       TextField(
+  //                         controller: _taskController,
+  //                         decoration: const InputDecoration(
+  //                           border: OutlineInputBorder(),
+  //                           hintText: 'Enter New Task',
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   //DROPDOWN MENU GOES HERE
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     },
+  //     backgroundColor: Colors.orange,
+  //     tooltip: 'Add Task',
+  //     child: const Icon(Icons.add),
+  //   );
+  // }
 
   // Functions
   void _addTask(String taskToAdd) {

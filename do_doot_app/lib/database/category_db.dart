@@ -42,6 +42,7 @@ class CategoryDb {
 
   void generateSampleData() {
     List<Map<String, dynamic>> sampleData = [
+      CategoryModel(id: 0, categoryName: 'All').toMap(),
       CategoryModel(id: 1, categoryName: 'Work').toMap(),
       CategoryModel(id: 2, categoryName: 'Hobbies').toMap(),
       CategoryModel(id: 3, categoryName: 'Housework').toMap(),
