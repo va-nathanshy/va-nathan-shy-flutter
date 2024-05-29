@@ -1,3 +1,4 @@
+import 'package:do_doot_app/database/category_db.dart';
 import 'package:do_doot_app/database/task_db.dart';
 import 'package:flutter/material.dart';
 // Models
@@ -8,6 +9,7 @@ import 'package:do_doot_app/widgets/task_item.dart';
 
 //DB
 import 'package:do_doot_app/repositories/task_repository_local.dart';
+import 'package:do_doot_app/repositories/category_repository_local.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,11 +21,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // Updated DB
   final TaskRepository _taskRepository = TaskRepository(TaskDb());
+  final CategoryRepository _categoryRepository =
+      CategoryRepository(CategoryDb());
 
   // Lists
   List<TaskModel> _taskList = [];
+  List<CategoryModel> _categoryList = [];
   List<TaskModel> searchTaskList = [];
-  List<CategoryModel> categoryList = [];
 
   final _taskController = TextEditingController();
 
@@ -34,10 +38,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _getInitialInfo() {
-    //taskList = TaskModel.setTasks(); // turn this into a getApi function thing
     _loadTasks();
+    _loadCategories();
     searchTaskList = TaskModel.setTasks();
-    categoryList = CategoryModel.setCategories();
   }
 
   void _loadTasks() async {
@@ -46,6 +49,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _taskList = taskList;
     });
+  }
+
+  void _loadCategories() async {
+    List<CategoryModel> categoryList =
+        await _categoryRepository.getAllCategories();
   }
 
   @override
@@ -96,20 +104,7 @@ class _HomePageState extends State<HomePage> {
                 size: 30,
               ),
             ),
-            PopupMenuButton(
-              icon: Icon(Icons.filter_alt),
-              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                const PopupMenuItem(
-                  child: Text('Item1'),
-                ),
-                const PopupMenuItem(
-                  child: Text('Item2'),
-                ),
-                const PopupMenuItem(
-                  child: Text('Item3'),
-                ),
-              ],
-            ),
+            _popupMenuButton(),
             IconButton(
               onPressed: () {
                 print('More button pressed');
@@ -121,6 +116,24 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         )
+      ],
+    );
+  }
+
+  PopupMenuButton<dynamic> _popupMenuButton() {
+    return PopupMenuButton(
+      icon: Icon(Icons.filter_alt),
+      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+        // const PopupMenuItem(
+        //   child: Text('Item1'),
+        // ),
+        // const PopupMenuItem(
+        //   child: Text('Item2'),
+        // ),
+        // const PopupMenuItem(
+        //   child: Text('Item3'),
+        // ),
+        //for (CategoryModel in _)
       ],
     );
   }
