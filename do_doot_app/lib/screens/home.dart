@@ -29,8 +29,6 @@ class _HomePageState extends State<HomePage> {
   List<CategoryModel> _categoryList = [];
   List<TaskModel> searchTaskList = [];
 
-  final _taskController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -80,7 +78,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      floatingActionButton: AddTaskFloatingActionButton(),
+      floatingActionButton: AddTaskFloatingActionButton(categoryList: _categoryList),
     );
   }
 
@@ -166,79 +164,15 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         for (TaskModel task in _taskList)
+          (_taskList.isNotEmpty) ?
           TaskItem(
             task: task,
-          ),
+          ) : const Text('No tasks :)'),
       ],
     );
   }
 
-  // FloatingActionButton _floatingActionButton(BuildContext context) {
-  //   return FloatingActionButton(
-  //     onPressed: () {
-  //       showModalBottomSheet(
-  //         context: context,
-  //         builder: (BuildContext context) {
-  //           return SizedBox(
-  //             child: Center(
-  //               child: Column(
-  //                 children: <Widget>[
-  //                   Row(
-  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                     children: [
-  //                       ElevatedButton(
-  //                         onPressed: () {
-  //                           Navigator.pop(context);
-  //                         },
-  //                         child: const Text('Close'),
-  //                       ),
-  //                       const Text('New Task'),
-  //                       ElevatedButton(
-  //                         onPressed: () {
-  //                           _addTask(_taskController.text);
-  //                           Navigator.pop(context);
-  //                         },
-  //                         child: const Text('Save'),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                   Row(
-  //                     children: [
-  //                       TextField(
-  //                         controller: _taskController,
-  //                         decoration: const InputDecoration(
-  //                           border: OutlineInputBorder(),
-  //                           hintText: 'Enter New Task',
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                   //DROPDOWN MENU GOES HERE
-  //                 ],
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     },
-  //     backgroundColor: Colors.orange,
-  //     tooltip: 'Add Task',
-  //     child: const Icon(Icons.add),
-  //   );
-  // }
-
   // Functions
-  void _addTask(String taskToAdd) {
-    setState(() {
-      // taskList.add(TaskModel(
-      //     id: DateTime.now().millisecondsSinceEpoch.toString(),
-      //     categoryId: 1,
-      //     task: taskToAdd));
-      // _runFilter('');
-    });
-    _taskController.clear();
-  }
-
   void _updateTask(
       TaskModel taskToUpdate, bool updatedStatus, String? updatedTask) {
     setState(() {
@@ -255,7 +189,7 @@ class _HomePageState extends State<HomePage> {
       _runFilter('');
     });
   }
-
+  
   void _runFilter(String searchKeyword) {
     // List<TaskModel> searchResults = [];
 

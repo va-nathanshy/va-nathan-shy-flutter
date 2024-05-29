@@ -27,7 +27,7 @@ class _TaskItemState extends State<TaskItem> {
     super.initState();
   }
 
-  //bool isEditing = false;
+  bool groupDeleteMode = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,11 +35,14 @@ class _TaskItemState extends State<TaskItem> {
       child: ListTile(
         onLongPress: () {
           print('Long press todo item');
-          _showModal(context);
-          // setState
+          setState(() {
+            // when groupDeleteMode triggered to true, all leading circles disappear and empty checkbox appears on the actionitem
+            groupDeleteMode = true;
+          });
         },
         onTap: () {
           print('Tapped todo item');
+          _showModal(context);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -98,7 +101,7 @@ class _TaskItemState extends State<TaskItem> {
                       onPressed: () {
                         print("task updated");
                         //widget.onTaskUpdated(widget.task, widget.task.isActive,
-                            //_taskUpdateController.text);
+                        //_taskUpdateController.text);
                         _taskUpdateController.clear();
                         Navigator.pop(context);
                       },
