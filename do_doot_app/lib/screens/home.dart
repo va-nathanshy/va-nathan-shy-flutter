@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 print('More button pressed');
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.more_vert,
                 size: 30,
               ),
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
 
   PopupMenuButton<dynamic> _popupMenuButton() {
     return PopupMenuButton(
-      icon: Icon(Icons.filter_alt),
+      icon: const Icon(Icons.filter_alt),
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
         for (CategoryModel category in _categoryList)
           PopupMenuItem(
